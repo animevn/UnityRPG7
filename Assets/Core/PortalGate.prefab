@@ -77,6 +77,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: 1
   spawnPawn: {fileID: 5377219791850966997}
+  destination: 0
+  fadeWaitTime: 1
+  timeFadeOut: 0.5
+  timeFadeIn: 1
 --- !u!1 &7853961188029928190
 GameObject:
   m_ObjectHideFlags: 0

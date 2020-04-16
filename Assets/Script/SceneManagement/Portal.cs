@@ -15,6 +15,9 @@ namespace Script.SceneManagement
         [SerializeField] private int sceneToLoad = -1;
         [SerializeField] private Transform spawnPawn;
         [SerializeField] private DestinationIdentifier destination;
+        [SerializeField] private float fadeWaitTime = 2f;
+        [SerializeField] private float timeFadeOut = 1f;
+        [SerializeField] private float timeFadeIn = 2f;
 
         private static bool IsPlayerCollider(Component player)
         {
@@ -36,10 +39,13 @@ namespace Script.SceneManagement
                 Debug.LogError("No scene to load");
                 yield break;
             }
-            
+            var fader = FindObjectOfType<Fader>();
             DontDestroyOnLoad(gameObject);
+            yield return fader.FadeOut(timeFadeOut);
             yield return SceneManager.LoadSceneAsync(sceneToLoad);
             UpdatePlayer(GetOtherPortal());
+            yield return new WaitForSeconds(fadeWaitTime);
+            yield return fader.FadeIn(timeFadeIn);
             Destroy(gameObject);
         }
 

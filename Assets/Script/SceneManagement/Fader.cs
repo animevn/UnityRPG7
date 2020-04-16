@@ -6,25 +6,23 @@ namespace Script.SceneManagement
 {
     public class Fader : MonoBehaviour
     {
-        [SerializeField] private float timeFade;
 
         private CanvasGroup canvas;
         
         private void Start()
         {
             canvas = GetComponent<CanvasGroup>();
-            StartCoroutine(FadeOutIn(timeFade));
         }
 
-        private IEnumerator FadeOutIn(float time)
-        {
-            yield return FadeOut(time);
-            print("Fadeout OK");
-            yield return FadeIn(time);
-            print("Fadein OK");
-        }
+//        public IEnumerator FadeOutIn(float time)
+//        {
+//            yield return FadeOut(time);
+//            print("Fadeout OK");
+//            yield return FadeIn(time);
+//            print("Fadein OK");
+//        }
 
-        private IEnumerator FadeOut(float time)
+        public IEnumerator FadeOut(float time)
         {
             while (Math.Abs(canvas.alpha - 1) > 0)
             {
@@ -33,7 +31,7 @@ namespace Script.SceneManagement
             }
         }
         
-        private IEnumerator FadeIn(float time)
+        public IEnumerator FadeIn(float time)
         {
             while (Math.Abs(canvas.alpha) > 0)
             {
