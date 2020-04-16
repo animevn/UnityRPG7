@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Script.SceneManagement
@@ -16,8 +17,16 @@ namespace Script.SceneManagement
         {
             if (IsPlayerCollider(other))
             {
-                SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);
+                StartCoroutine(Transition());
             }
+        }
+
+        private IEnumerator Transition()
+        {
+            DontDestroyOnLoad(gameObject);
+            yield return SceneManager.LoadSceneAsync(sceneToLoad);
+            print("Scene " + sceneToLoad + " just loaded");
+            Destroy(gameObject);
         }
     }
 }
