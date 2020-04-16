@@ -1,13 +1,20 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AI;
 
 namespace Script.SceneManagement
 {
     public class Portal : MonoBehaviour
     {
+        private enum DestinationIdentifier
+        {
+            A, B, C
+        }
+        
         [SerializeField] private int sceneToLoad = -1;
         [SerializeField] private Transform spawnPawn;
+        [SerializeField] private DestinationIdentifier destination;
 
         private static bool IsPlayerCollider(Component player)
         {
@@ -24,6 +31,12 @@ namespace Script.SceneManagement
 
         private IEnumerator Transition()
         {
+            if (sceneToLoad < 0)    
+            {
+                Debug.LogError("No scene to load");
+                yield break;
+            }
+            
             DontDestroyOnLoad(gameObject);
             yield return SceneManager.LoadSceneAsync(sceneToLoad);
             UpdatePlayer(GetOtherPortal());
@@ -33,7 +46,7 @@ namespace Script.SceneManagement
         private void UpdatePlayer(Portal otherPortal)
         {
             var player = GameObject.FindWithTag("Player");
-            player.transform.position = otherPortal.spawnPawn.position;
+            player.GetComponent<NavMeshAgent>().Warp(otherPortal.spawnPawn.position);
             player.transform.rotation = otherPortal.spawnPawn.rotation;
             
         }
@@ -43,6 +56,7 @@ namespace Script.SceneManagement
             foreach (var portal in FindObjectsOfType<Portal>())
             {
                 if (portal == this) continue;
+                if (portal.destination != destination) continue;
                 return portal;
             }
 
